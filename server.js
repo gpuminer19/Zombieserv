@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// База данных прямо здесь
+// База данных
 const db = new sqlite3.Database(':memory:');
 
 db.serialize(() => {
@@ -17,12 +17,10 @@ db.serialize(() => {
     console.log('✅ Database ready');
 });
 
-// Health check
 app.get('/', (req, res) => {
     res.json({ status: 'ok', message: 'Shooter Backend running' });
 });
 
-// Сохранение прогресса
 app.post('/api/save', (req, res) => {
     const { telegram_id, save_data } = req.body;
     if (!telegram_id) return res.status(400).json({ error: 'telegram_id required' });
@@ -35,7 +33,6 @@ app.post('/api/save', (req, res) => {
         });
 });
 
-// Загрузка прогресса
 app.post('/api/load', (req, res) => {
     const { telegram_id } = req.body;
     if (!telegram_id) return res.status(400).json({ error: 'telegram_id required' });
@@ -46,7 +43,6 @@ app.post('/api/load', (req, res) => {
     });
 });
 
-// Сохранение монет
 app.post('/api/coins', (req, res) => {
     const { telegram_id, coins } = req.body;
     if (!telegram_id) return res.status(400).json({ error: 'telegram_id required' });
